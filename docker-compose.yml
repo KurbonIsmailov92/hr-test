@@ -37,6 +37,7 @@ services:
       - app
 
   node:
+    profiles: ["dev"]
     image: node:22-alpine
     user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
     working_dir: /var/www/html

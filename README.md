@@ -1,74 +1,58 @@
-# HR-платформа
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-Единая HR-платформа: Career Portal (кандидаты), Employee Portal (сотрудники), HR Admin (администрирование).
-Modular Monolith на Laravel + PostgreSQL + Vue 3 / Inertia. Статус разработки: см. [docs/PROGRESS.md](docs/PROGRESS.md).
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## Требования
+## About Laravel
 
-Только **Docker** с Docker Compose. PHP, Composer и Node на хосте не нужны.
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-## Первый запуск
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-```bash
-./setup.sh
-```
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-Скрипт:
-1. создаёт `.env` и генерирует пароль БД;
-2. собирает PHP-образ и создаёт Laravel-скелет актуальной стабильной версии, накладывая код проекта поверх него;
-3. ставит зависимости (Composer, npm);
-4. запускает PostgreSQL и Redis, выполняет миграции и сидеры.
+## Learning Laravel
 
-Затем:
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-```bash
-docker compose up -d
-```
+In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-| Адрес | Назначение |
-|---|---|
-| http://localhost:8080 | Приложение |
-| http://localhost:8025 | Mailpit (письма сброса пароля) |
-| http://localhost:5173 | Vite dev-сервер (HMR) |
+You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
 
-В окружении `local` сидер создаёт demo-пользователей (`admin@`, `hr@`, `recruiter@`, `manager@`, `employee@`, `candidate@example.test`).
-Общий пароль печатается в консоль при первом запуске сидера. Свой пароль можно задать через `SEED_DEMO_PASSWORD` в `.env`.
-На production demo-пользователи не создаются, администратор создаётся командой:
+## Agentic Development
+
+Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
 
 ```bash
-docker compose exec app php artisan hrms:create-admin admin@company.tj Фамилия Имя
+composer require laravel/boost --dev
+
+php artisan boost:install
 ```
 
-## Тесты и проверки
+Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
-```bash
-docker compose exec app php artisan test        # Pest (используется БД hrms_test)
-docker compose exec node npm run typecheck      # vue-tsc
-docker compose exec node npm run build          # production-сборка фронтенда
-```
+## Contributing
 
-## Структура
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-```
-app/Modules/<Module>/{Models,Actions,Enums,Http/...}   бизнес-модули (Identity, Recruitment, Audit; остальные по этапам)
-app/Http/                                              общие middleware и контроллеры дашбордов
-routes/{careers,auth,portal,admin}.php                 три интерфейса + аутентификация
-resources/js/{Layouts,Pages,Components,locales}        Vue 3 + TypeScript, тексты в locales/*.json
-lang/{ru,tg,en}                                        серверные сообщения (валидация, аутентификация)
-config/hrms.php                                        бизнес-настройки (языки, пояс, валюта)
-```
+## Code of Conduct
 
-Области доступа (backend, Spatie Permission + middleware `permission:`):
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-| Роль | `/admin` | `/portal` | `/candidate` |
-|---|---|---|---|
-| admin | да | нет | нет |
-| hr, recruiter | да | нет | нет |
-| manager, employee | нет | да | нет |
-| candidate | нет | нет | да |
+## Security Vulnerabilities
 
-Один человек может иметь несколько ролей (например, руководитель: `manager` + `employee`).
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## Окружения
+## License
 
-DEV/TEST/PROD различаются только переменными окружения (`.env`, секреты в репозиторий не попадают). `phpunit.xml` принудительно использует отдельную БД `hrms_test`.
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

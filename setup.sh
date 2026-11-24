@@ -24,15 +24,17 @@ if [ ! -f artisan ]; then
   docker compose run --rm --no-deps app sh -c '
     composer create-project laravel/laravel /tmp/skeleton --no-interaction --no-scripts --prefer-dist &&
     cp -rn /tmp/skeleton/. /var/www/html/'
-  # Удаляем файлы скелета, заменённые структурой проекта
-  rm -f vite.config.js resources/js/app.js resources/js/bootstrap.js \
-        database/migrations/0001_01_01_000000_create_users_table.php \
-        tests/Feature/ExampleTest.php tests/Unit/ExampleTest.php \
-        app/Models/User.php resources/views/welcome.blade.php routes/web.php
 fi
+
+# Удаляем файлы скелета, заменённые структурой проекта
+rm -f vite.config.js resources/js/app.js resources/js/bootstrap.js \
+      database/migrations/0001_01_01_000000_create_users_table.php \
+      tests/Feature/ExampleTest.php tests/Unit/ExampleTest.php \
+      app/Models/User.php resources/views/welcome.blade.php routes/web.php
 
 echo ">> PHP-зависимости"
 docker compose run --rm --no-deps app composer require inertiajs/inertia-laravel spatie/laravel-permission --no-interaction
+docker compose run --rm --no-deps app composer config allow-plugins.pestphp/pest-plugin true
 docker compose run --rm --no-deps app composer require --dev pestphp/pest pestphp/pest-plugin-laravel --with-all-dependencies --no-interaction
 
 echo ">> Ключ приложения, конфиг permission, языковые файлы"
